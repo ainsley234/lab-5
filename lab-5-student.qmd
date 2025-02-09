@@ -67,6 +67,7 @@ relevant_report <- crime_scene_report |>
 **Follow the evidence to the person responsible for the murder, building a report as you go.**
 Hint: Make sure you check for interviews with any suspects!
 
+### Retrieve witness interviews
 
 ```{r}
 #| label: finding-witness-IDs
@@ -82,7 +83,6 @@ witness_ID_2 <- person |>
          pull(id)
 
 ```
-
 
 ```{r}
 #| label: retrieving-interviews
@@ -103,6 +103,8 @@ print(interview_2)
 ```
 
 
+### Sort by gym information
+
 ```{r}
 #| label: sorting-gym-information 
 # membership number on the bag started with \"48Z\"
@@ -115,8 +117,12 @@ filter_by_gym_id <- get_fit_now_member |>
          check_in_date == "20180109",
          str_detect(id, "^48Z"))
 
+print(pull(filter_by_gym_id, name))
+
 ```
 
+
+### Sort by licence plate information
 
 ```{r}
 #| label: sorting-licence-plate-information 
@@ -125,11 +131,14 @@ filter_by_gym_id <- get_fit_now_member |>
 filter_by_licence <- person |>
   semi_join(filter_by_gym_id, by = c("id" = "person_id")) |>
   left_join(drivers_license, by = c("license_id" = "id")) |>
-  filter(str_detect(plate_number, "H42W"))
+  filter(str_detect(plate_number, "H42W")) |>
+  pull(name)
+
+print(filter_by_licence)
 
 ```
 
 
 ## And the final suspect is...
 
-*Put the name of the person responsible for the murder here:*
+**Jeremy Bowers**
