@@ -1,6 +1,6 @@
 ---
 title: "Lab 5: Murder in SQL City"
-author: "Your name here!"
+author: "Ainsley Forster!"
 format: html
 editor: source
 embed-resources: true
@@ -57,11 +57,47 @@ Detective Wickham reaches out to you...
 ```{r}
 #| label: inspecting-crime-scene-report
 
+relevant_report <- crime_scene_report |>
+  filter(city == "SQL City",
+         type == "murder")
+
 ```
 
 
 **Follow the evidence to the person responsible for the murder, building a report as you go.**
 Hint: Make sure you check for interviews with any suspects!
+
+
+```{r}
+#| label: finding-witness-IDs
+
+witness_ID_1 <- person |>
+  filter(address_street_name == "Northwestern Dr",
+         address_number == max(address_number)) |>
+         pull(id)
+
+witness_ID_2 <- person |>
+  filter(address_street_name == "Franklin Ave",
+         str_detect(name, "Annabel")) |>
+         pull(id)
+
+```
+
+
+```{r}
+#| label: retrieving-interviews
+
+interview_1 <- interview |>
+  filter(person_id == witness_ID_1) |>
+  pull(transcript)
+
+interview_2 <- interview |>
+  filter(person_id == witness_ID_2) |>
+  pull(transcript)
+
+
+```
+
 
 
 ## And the final suspect is...
