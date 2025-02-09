@@ -91,13 +91,43 @@ interview_1 <- interview |>
   filter(person_id == witness_ID_1) |>
   pull(transcript)
 
+print(interview_1)
+
 interview_2 <- interview |>
   filter(person_id == witness_ID_2) |>
   pull(transcript)
 
+print(interview_2)
+
 
 ```
 
+
+```{r}
+#| label: sorting-gym-information 
+# membership number on the bag started with \"48Z\"
+# gold member
+# working out January the 9th
+
+filter_by_gym_id <- get_fit_now_member |>
+  full_join(get_fit_now_check_in, by = c("id" = "membership_id")) |>
+  filter(membership_status == "gold",
+         check_in_date == "20180109",
+         str_detect(id, "^48Z"))
+
+```
+
+
+```{r}
+#| label: sorting-licence-plate-information 
+# plate that included \"H42W\"." 
+
+filter_by_licence <- person |>
+  semi_join(filter_by_gym_id, by = c("id" = "person_id")) |>
+  left_join(drivers_license, by = c("license_id" = "id")) |>
+  filter(str_detect(plate_number, "H42W"))
+
+```
 
 
 ## And the final suspect is...
